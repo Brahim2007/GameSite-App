@@ -97,11 +97,6 @@ function MonthlyReportPage() {
     }
   }, [isAuthenticated, user, selectedMonth, filteredUserId, filterType, fetchReport, fetchSettings]);
 
-  const handleFilterChange = (userId: string | null, type: 'all' | 'user' | 'me') => {
-    setFilteredUserId(userId);
-    setFilterType(type);
-  };
-
   const handleExportPDF = () => {
     if (reportData) {
       exportMonthlyReportToPDF(
