@@ -1,0 +1,67 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  RECEPTION
+}
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
+  name      String
+  role      UserRole @default(RECEPTION)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  entries   Entry[]
+  
+  @@map("users")
+}
+
+model Entry {
+  id                Int      @id @default(autoincrement())
+  serialNumber      Int
+  numberOfCustomers Int
+  pricePerPerson    Float
+  totalAmount       Float
+  date              DateTime @default(now())
+  
+  userId            String
+  user              User     @relation(fields: [userId], references: [id])
+  
+  createdAt         DateTime @default(now())
+  
+  @@index([date])
+  @@index([userId])
+  @@map("entries")
+}
+
+model Settings {
+  id              Int      @id @default(autoincrement())
+  key             String   @unique
+  value           String   @db.LongText
+  updatedAt       DateTime @updatedAt
+  updatedBy       String?
+  
+  @@map("settings")
+}
+
+model DailyReset {
+  id              Int      @id @default(autoincrement())
+  resetDate       DateTime @unique
+  lastSerialNumber Int     @default(0)
+  
+  @@map("daily_resets")
+}
+
