@@ -2,9 +2,15 @@
   "name": "gamescity-management",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=18.17 <=20.x"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && prisma db push --accept-data-loss && next build",
+    "build": "prisma migrate deploy && next build",
     "start": "next start",
     "lint": "next lint",
     "db:generate": "prisma generate",

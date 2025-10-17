@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { startOfDay, endOfDay } from 'date-fns';
 
+export const runtime = 'nodejs';
+
 // GET - Get entries (optionally filtered by date)
 export async function GET(request: NextRequest) {
   try {
