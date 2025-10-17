@@ -39,19 +39,19 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-500 to-primary-700">
-      <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-100 rounded-full mb-4">
-            <LogIn className="w-8 h-8 text-primary-600" />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-500 to-primary-700 py-8 px-4">
+      <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm">
+        <div className="text-center mb-6">
+          <div className="inline-flex items-center justify-center w-12 h-12 bg-primary-100 rounded-full mb-3">
+            <LogIn className="w-6 h-6 text-primary-600" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-2xl font-bold text-gray-900 mb-1">
             مدينة الألعاب الترفيهية
           </h1>
-          <p className="text-gray-600">نظام إدارة الزبائن</p>
+          <p className="text-sm text-gray-600">نظام إدارة الزبائن</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="label">اسم المستخدم</label>
             <input
@@ -84,7 +84,7 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
           <button 
             type="submit" 
             disabled={isLoggingIn}
-            className="w-full btn btn-primary py-3 text-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 space-x-reverse"
+            className="w-full btn btn-primary py-2.5 text-base disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 space-x-reverse"
           >
             {isLoggingIn ? (
               <>
@@ -97,9 +97,9 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
           </button>
         </form>
 
-        <div className="mt-6 p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
-          <p className="text-sm text-gray-700 font-semibold mb-3 flex items-center gap-2">
-            <UserCheck className="w-4 h-4" />
+        <div className="mt-4 p-3 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
+          <p className="text-xs text-gray-700 font-semibold mb-2 flex items-center gap-1">
+            <UserCheck className="w-3 h-3" />
             حسابات تجريبية - اضغط للتعبئة التلقائية:
           </p>
           <div className="space-y-2">
@@ -107,19 +107,19 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
             <button
               type="button"
               onClick={() => fillCredentials('admin', 'admin')}
-              className="w-full text-right px-3 py-2.5 bg-white hover:bg-blue-50 border border-blue-200 rounded-lg transition-all duration-200 hover:shadow-md group"
+              className="w-full text-right px-2.5 py-2 bg-white hover:bg-blue-50 border border-blue-200 rounded-lg transition-all duration-200 hover:shadow-md group"
             >
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
-                    <User className="w-4 h-4 text-white" />
+                <div className="flex items-center gap-1.5">
+                  <div className="w-6 h-6 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                    <User className="w-3 h-3 text-white" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-gray-800">مدير النظام</p>
+                    <p className="text-xs font-semibold text-gray-800">مدير النظام</p>
                     <p className="text-xs text-gray-500">admin / admin</p>
                   </div>
                 </div>
-                <div className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full font-semibold">
+                <div className="text-xs bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded-full font-semibold">
                   أدمن
                 </div>
               </div>
@@ -129,19 +129,19 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
             <button
               type="button"
               onClick={() => fillCredentials('reception1', 'reception1')}
-              className="w-full text-right px-3 py-2.5 bg-white hover:bg-blue-50 border border-blue-200 rounded-lg transition-all duration-200 hover:shadow-md group"
+              className="w-full text-right px-2.5 py-2 bg-white hover:bg-blue-50 border border-blue-200 rounded-lg transition-all duration-200 hover:shadow-md group"
             >
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center">
-                    <User className="w-4 h-4 text-white" />
+                <div className="flex items-center gap-1.5">
+                  <div className="w-6 h-6 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center">
+                    <User className="w-3 h-3 text-white" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-gray-800">فاطمة علي</p>
+                    <p className="text-xs font-semibold text-gray-800">فاطمة علي</p>
                     <p className="text-xs text-gray-500">reception1 / reception1</p>
                   </div>
                 </div>
-                <div className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-semibold">
+                <div className="text-xs bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full font-semibold">
                   استقبال
                 </div>
               </div>
@@ -151,26 +151,26 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
             <button
               type="button"
               onClick={() => fillCredentials('reception2', 'reception2')}
-              className="w-full text-right px-3 py-2.5 bg-white hover:bg-blue-50 border border-blue-200 rounded-lg transition-all duration-200 hover:shadow-md group"
+              className="w-full text-right px-2.5 py-2 bg-white hover:bg-blue-50 border border-blue-200 rounded-lg transition-all duration-200 hover:shadow-md group"
             >
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
-                    <User className="w-4 h-4 text-white" />
+                <div className="flex items-center gap-1.5">
+                  <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
+                    <User className="w-3 h-3 text-white" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-gray-800">محمود حسن</p>
+                    <p className="text-xs font-semibold text-gray-800">محمود حسن</p>
                     <p className="text-xs text-gray-500">reception2 / reception2</p>
                   </div>
                 </div>
-                <div className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full font-semibold">
+                <div className="text-xs bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-full font-semibold">
                   استقبال
                 </div>
               </div>
             </button>
           </div>
           
-          <p className="text-xs text-gray-500 mt-3 text-center">
+          <p className="text-xs text-gray-500 mt-2 text-center">
             💡 اضغط على أي حساب لملء البيانات تلقائياً
           </p>
         </div>
