@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { LogIn } from 'lucide-react';
+import { LogIn, User, UserCheck } from 'lucide-react';
 
 interface LoginFormProps {
   onLogin: (username: string, password: string) => Promise<boolean>;
@@ -30,6 +30,12 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
       setIsLoggingIn(false);
     }
     // If success, the page will redirect so no need to reset isLoggingIn
+  };
+
+  const fillCredentials = (user: string, pass: string) => {
+    setUsername(user);
+    setPassword(pass);
+    setError('');
   };
 
   return (
@@ -91,13 +97,82 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
           </button>
         </form>
 
-        <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-          <p className="text-sm text-gray-700 font-semibold mb-2">حسابات تجريبية:</p>
-          <div className="text-xs text-gray-600 space-y-1">
-            <p>👤 admin / admin (أدمن)</p>
-            <p>👤 reception1 / reception1 (استقبال)</p>
-            <p>👤 reception2 / reception2 (استقبال)</p>
+        <div className="mt-6 p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
+          <p className="text-sm text-gray-700 font-semibold mb-3 flex items-center gap-2">
+            <UserCheck className="w-4 h-4" />
+            حسابات تجريبية - اضغط للتعبئة التلقائية:
+          </p>
+          <div className="space-y-2">
+            {/* Admin Button */}
+            <button
+              type="button"
+              onClick={() => fillCredentials('admin', 'admin')}
+              className="w-full text-right px-3 py-2.5 bg-white hover:bg-blue-50 border border-blue-200 rounded-lg transition-all duration-200 hover:shadow-md group"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                    <User className="w-4 h-4 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-800">مدير النظام</p>
+                    <p className="text-xs text-gray-500">admin / admin</p>
+                  </div>
+                </div>
+                <div className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full font-semibold">
+                  أدمن
+                </div>
+              </div>
+            </button>
+
+            {/* Reception 1 Button */}
+            <button
+              type="button"
+              onClick={() => fillCredentials('reception1', 'reception1')}
+              className="w-full text-right px-3 py-2.5 bg-white hover:bg-blue-50 border border-blue-200 rounded-lg transition-all duration-200 hover:shadow-md group"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center">
+                    <User className="w-4 h-4 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-800">فاطمة علي</p>
+                    <p className="text-xs text-gray-500">reception1 / reception1</p>
+                  </div>
+                </div>
+                <div className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-semibold">
+                  استقبال
+                </div>
+              </div>
+            </button>
+
+            {/* Reception 2 Button */}
+            <button
+              type="button"
+              onClick={() => fillCredentials('reception2', 'reception2')}
+              className="w-full text-right px-3 py-2.5 bg-white hover:bg-blue-50 border border-blue-200 rounded-lg transition-all duration-200 hover:shadow-md group"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
+                    <User className="w-4 h-4 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-800">محمود حسن</p>
+                    <p className="text-xs text-gray-500">reception2 / reception2</p>
+                  </div>
+                </div>
+                <div className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full font-semibold">
+                  استقبال
+                </div>
+              </div>
+            </button>
           </div>
+          
+          <p className="text-xs text-gray-500 mt-3 text-center">
+            💡 اضغط على أي حساب لملء البيانات تلقائياً
+          </p>
         </div>
       </div>
     </div>
