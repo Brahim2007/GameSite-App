@@ -29,13 +29,6 @@ function DailyReportPage() {
     }
   }, [isAuthenticated, loading, router]);
 
-  useEffect(() => {
-    if (isAuthenticated && user) {
-      fetchReport();
-      fetchSettings();
-    }
-  }, [isAuthenticated, user, selectedDate, filteredUserId, filterType, fetchReport, fetchSettings]);
-
   const fetchReport = useCallback(async () => {
     if (!user) return;
     
@@ -75,11 +68,6 @@ function DailyReportPage() {
     }
   }, [user, selectedDate, filteredUserId, filterType]);
 
-  const handleFilterChange = (userId: string | null, type: 'all' | 'user' | 'me') => {
-    setFilteredUserId(userId);
-    setFilterType(type);
-  };
-
   const fetchSettings = useCallback(async () => {
     try {
       const response = await fetch('/api/settings');
@@ -96,6 +84,18 @@ function DailyReportPage() {
       console.error('Error fetching settings:', error);
     }
   }, []);
+
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      fetchReport();
+      fetchSettings();
+    }
+  }, [isAuthenticated, user, selectedDate, filteredUserId, filterType, fetchReport, fetchSettings]);
+
+  const handleFilterChange = (userId: string | null, type: 'all' | 'user' | 'me') => {
+    setFilteredUserId(userId);
+    setFilterType(type);
+  };
 
   const handlePrint = () => {
     window.print();

@@ -30,14 +30,6 @@ function DashboardPage() {
     }
   }, [isAuthenticated, loading, router]);
 
-  // Fetch today's entries and settings
-  useEffect(() => {
-    if (isAuthenticated && user) {
-      fetchTodayData();
-      fetchSettings();
-    }
-  }, [isAuthenticated, user, fetchTodayData, fetchSettings]);
-
   const fetchTodayData = useCallback(async () => {
     if (!user) return;
     
@@ -88,6 +80,14 @@ function DashboardPage() {
       console.error('Error fetching settings:', error);
     }
   }, []);
+
+  // Fetch today's entries and settings
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      fetchTodayData();
+      fetchSettings();
+    }
+  }, [isAuthenticated, user, fetchTodayData, fetchSettings]);
 
   const handleNewEntry = async (numberOfCustomers: number) => {
     if (!user || isSubmitting) return;
