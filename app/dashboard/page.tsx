@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import Navbar from '@/components/Navbar';
@@ -36,9 +36,9 @@ function DashboardPage() {
       fetchTodayData();
       fetchSettings();
     }
-  }, [isAuthenticated, user]);
+  }, [isAuthenticated, user, fetchTodayData, fetchSettings]);
 
-  const fetchTodayData = async () => {
+  const fetchTodayData = useCallback(async () => {
     if (!user) return;
     
     try {
@@ -59,9 +59,9 @@ function DashboardPage() {
     } catch (error) {
       console.error('Error fetching today data:', error);
     }
-  };
+  }, [user]);
 
-  const fetchSettings = async () => {
+  const fetchSettings = useCallback(async () => {
     try {
       const response = await fetch('/api/settings');
       if (response.ok) {
@@ -87,7 +87,7 @@ function DashboardPage() {
     } catch (error) {
       console.error('Error fetching settings:', error);
     }
-  };
+  }, []);
 
   const handleNewEntry = async (numberOfCustomers: number) => {
     if (!user || isSubmitting) return;

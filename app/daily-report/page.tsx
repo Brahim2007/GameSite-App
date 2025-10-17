@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import Navbar from '@/components/Navbar';
@@ -34,9 +34,9 @@ function DailyReportPage() {
       fetchReport();
       fetchSettings();
     }
-  }, [isAuthenticated, user, selectedDate, filteredUserId, filterType]);
+  }, [isAuthenticated, user, selectedDate, filteredUserId, filterType, fetchReport, fetchSettings]);
 
-  const fetchReport = async () => {
+  const fetchReport = useCallback(async () => {
     if (!user) return;
     
     setIsLoading(true);
@@ -73,14 +73,14 @@ function DailyReportPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [user, selectedDate, filteredUserId, filterType]);
 
   const handleFilterChange = (userId: string | null, type: 'all' | 'user' | 'me') => {
     setFilteredUserId(userId);
     setFilterType(type);
   };
 
-  const fetchSettings = async () => {
+  const fetchSettings = useCallback(async () => {
     try {
       const response = await fetch('/api/settings');
       if (response.ok) {
@@ -95,7 +95,7 @@ function DailyReportPage() {
     } catch (error) {
       console.error('Error fetching settings:', error);
     }
-  };
+  }, []);
 
   const handlePrint = () => {
     window.print();
