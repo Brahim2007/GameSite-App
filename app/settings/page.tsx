@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import Navbar from '@/components/Navbar';
-import { DollarSign, Save, AlertCircle, Building2, Trash2 } from 'lucide-react';
+import { DollarSign, Save, AlertCircle, Building2, Trash2, RefreshCw, Hash } from 'lucide-react';
 import { mockSettings } from '@/lib/mockData';
 import { formatCurrency, formatDateTime } from '@/lib/utils';
 
@@ -20,6 +20,9 @@ function SettingsPage() {
   const [lastPriceUpdate, setLastPriceUpdate] = useState<Date>(new Date());
   const [updatedBy, setUpdatedBy] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+  const [currentSerial, setCurrentSerial] = useState(0);
+  const [autoResetSerial, setAutoResetSerial] = useState(true);
+  const [isResetting, setIsResetting] = useState(false);
 
   useEffect(() => {
     if (!loading) {
@@ -53,9 +56,78 @@ function SettingsPage() {
           setLogoUrl(data.settings.logoUrl.value);
           setLogoPreview(data.settings.logoUrl.value);
         }
+        if (data.settings.autoResetSerial) {
+          setAutoResetSerial(data.settings.autoResetSerial.value === 'true');
+        }
       }
+      // Fetch current serial number
+      fetchCurrentSerial();
     } catch (error) {
       console.error('Error fetching settings:', error);
+    }
+  };
+
+  const fetchCurrentSerial = async () => {
+    try {
+      const response = await fetch('/api/reset-serial');
+      if (response.ok) {
+        const data = await response.json();
+        setCurrentSerial(data.currentSerial);
+      }
+    } catch (error) {
+      console.error('Error fetching current serial:', error);
+    }
+  };
+
+  const handleResetSerial = async () => {
+    if (!confirm('هل أنت متأكد من إعادة تعيين الرقم التسلسلي إلى الصفر؟')) {
+      return;
+    }
+
+    setIsResetting(true);
+    try {
+      const response = await fetch('/api/reset-serial', {
+        method: 'POST',
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setCurrentSerial(data.currentSerial);
+        setSaved(true);
+        setTimeout(() => setSaved(false), 3000);
+      }
+    } catch (error) {
+      console.error('Error resetting serial:', error);
+    } finally {
+      setIsResetting(false);
+    }
+  };
+
+  const handleSaveAutoReset = async () => {
+    if (isSaving) return;
+    
+    setIsSaving(true);
+    try {
+      const response = await fetch('/api/settings', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          key: 'autoResetSerial',
+          value: String(autoResetSerial),
+          updatedBy: user?.name,
+        }),
+      });
+
+      if (response.ok) {
+        setSaved(true);
+        setTimeout(() => setSaved(false), 3000);
+      }
+    } catch (error) {
+      console.error('Error saving auto reset setting:', error);
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -386,6 +458,103 @@ function SettingsPage() {
                     </>
                   )}
                 </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Serial Number Reset Settings */}
+          <div className="card">
+            <div className="flex items-center space-x-3 space-x-reverse mb-6">
+              <div className="bg-orange-100 rounded-full p-3">
+                <Hash className="w-6 h-6 text-orange-600" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900">الرقم التسلسلي</h2>
+                <p className="text-sm text-gray-600">إدارة تصفير الرقم التسلسلي اليومي</p>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              {/* Current Serial Number */}
+              <div className="bg-gradient-to-br from-orange-50 to-yellow-50 border-2 border-orange-200 rounded-lg p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-700 mb-1">الرقم التسلسلي الحالي</p>
+                    <p className="text-3xl font-bold text-orange-600">{currentSerial}</p>
+                  </div>
+                  <div className="bg-white rounded-full p-4 shadow-md">
+                    <Hash className="w-8 h-8 text-orange-500" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Auto Reset Option */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <label className="flex items-center space-x-2 space-x-reverse cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={autoResetSerial}
+                        onChange={(e) => setAutoResetSerial(e.target.checked)}
+                        className="w-5 h-5 text-primary-600 rounded focus:ring-primary-500"
+                      />
+                      <div>
+                        <span className="font-semibold text-gray-900">تصفير تلقائي يومياً</span>
+                        <p className="text-sm text-gray-600">يتم إعادة تعيين الرقم التسلسلي إلى 0 تلقائياً كل يوم</p>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                onClick={handleSaveAutoReset}
+                disabled={isSaving}
+                className="w-full btn btn-primary py-3 flex items-center justify-center space-x-2 space-x-reverse disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSaving ? (
+                  <>
+                    <div className="inline-block animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
+                    <span>حفظ...</span>
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-5 h-5" />
+                    <span>حفظ إعدادات التصفير التلقائي</span>
+                  </>
+                )}
+              </button>
+
+              {/* Manual Reset */}
+              <div className="border-t pt-4">
+                <h3 className="font-semibold text-gray-700 mb-3">إعادة تعيين يدوي</h3>
+                <p className="text-sm text-gray-600 mb-4">
+                  إذا كنت تريد إعادة تعيين الرقم التسلسلي إلى الصفر الآن، اضغط على الزر أدناه.
+                </p>
+                <button
+                  onClick={handleResetSerial}
+                  disabled={isResetting}
+                  className="w-full btn bg-orange-600 hover:bg-orange-700 text-white py-3 flex items-center justify-center space-x-2 space-x-reverse disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isResetting ? (
+                    <>
+                      <div className="inline-block animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
+                      <span>جاري التصفير...</span>
+                    </>
+                  ) : (
+                    <>
+                      <RefreshCw className="w-5 h-5" />
+                      <span>إعادة تعيين الرقم التسلسلي الآن</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <p className="text-sm text-yellow-800">
+                  <strong>ملاحظة:</strong> عند تفعيل التصفير التلقائي، سيبدأ الرقم التسلسلي من 1 في بداية كل يوم جديد.
+                </p>
               </div>
             </div>
           </div>
